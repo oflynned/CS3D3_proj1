@@ -6,25 +6,37 @@ using System.Text;
 public class SynchronousSocketClient
 {
 
-    public static void StartClient() {
+    public static void StartClient()
+    {
         // Data buffer for incoming data.
         byte[] bytes = new byte[1024];
 
         // Connect to a remote device.
-        try {
+        try
+        {
             // Establish the remote endpoint for the socket.
             // This example uses port 11000 on the local computer.
-            int port = 8080;
+            int port;
+            IPAddress ipAddress;
+
+            Console.WriteLine("Input an IP address to connect to: ");
+            ipAddress = IPAddress.Parse(Console.ReadLine());
+            Console.WriteLine("Input a port to connect to: ");
+            port = int.Parse(Console.ReadLine());
+
             IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint remoteEP = new IPEndPoint(ipAddress,port);
+            //IPAddress ipAddress = ipHostInfo.AddressList[0];
+
+
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
             // Create a TCP/IP  socket.
-            Socket sender = new Socket(AddressFamily.InterNetwork, 
-                SocketType.Stream, ProtocolType.Tcp );
+            Socket sender = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
 
             // Connect the socket to the remote endpoint. Catch any errors.
-            try {
+            try
+            {
                 sender.Connect(remoteEP);
 
                 Console.WriteLine("Socket connected to {0}",
@@ -40,10 +52,11 @@ public class SynchronousSocketClient
 
                 // Encode the data string into a byte array.
                 //read in user defined data
-               // string line = Console.ReadLine();
-               // byte[] msg = byte[].Parse(line);
+                // string line = Console.ReadLine();
+                // byte[] msg = byte[].Parse(line);
 
-                byte[] msg = Encoding.ASCII.GetBytes("Such test very socket much byte wow <EOF>");
+                byte[] msg = Encoding.ASCII.GetBytes("They're gonna suck my dick.");
+
                 Console.WriteLine("encoded message to bytes");
                 System.Threading.Thread.Sleep(3000);
 
@@ -55,7 +68,7 @@ public class SynchronousSocketClient
                 // Receive the response from the remote device.
                 int bytesRec = sender.Receive(bytes);
                 Console.WriteLine("Echoed test = {0}",
-                    Encoding.ASCII.GetString(bytes,0,bytesRec));
+                    Encoding.ASCII.GetString(bytes, 0, bytesRec));
                 Console.WriteLine("received response from server");
                 System.Threading.Thread.Sleep(3000);
 
@@ -64,27 +77,36 @@ public class SynchronousSocketClient
                 System.Threading.Thread.Sleep(3000);
                 sender.Shutdown(SocketShutdown.Both);
                 sender.Close();
-                
-            } catch (ArgumentNullException ane) {
-                Console.WriteLine("ArgumentNullException : {0}",ane.ToString());
-            } catch (SocketException se) {
-                Console.WriteLine("SocketException : {0}",se.ToString());
-            } catch (Exception e) {
+
+            }
+            catch (ArgumentNullException ane)
+            {
+                Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+            }
+            catch (SocketException se)
+            {
+                Console.WriteLine("SocketException : {0}", se.ToString());
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine("Unexpected exception : {0}", e.ToString());
             }
 
-        } catch (Exception e) {
-            Console.WriteLine( e.ToString());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
         }
     }
 
     public static int Main(String[] args)
     {
         bool done = false;
-        while (!done) { 
-        Console.WriteLine("Do you want to send a message?");
-        string question = Console.ReadLine();
-        switch (question)
+        while (!done)
+        {
+            Console.WriteLine("Do you want to send a message?");
+            string question = Console.ReadLine();
+            switch (question)
             {
                 case ("yes"):
                 case ("y"):
