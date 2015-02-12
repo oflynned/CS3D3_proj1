@@ -42,7 +42,6 @@ public class SynchronousSocketClient
                 Console.WriteLine("Socket connected to {0}",
                     sender.RemoteEndPoint.ToString());
                 Console.WriteLine("connected to socket");
-                System.Threading.Thread.Sleep(3000);
 
                 //byte[] msg;
                 //byte[] line = Console.ReadLine();
@@ -58,23 +57,19 @@ public class SynchronousSocketClient
                 byte[] msg = Encoding.ASCII.GetBytes("They're gonna suck my dick.");
 
                 Console.WriteLine("encoded message to bytes");
-                System.Threading.Thread.Sleep(3000);
 
                 // Send the data through the socket.
                 int bytesSent = sender.Send(msg);
                 Console.WriteLine("sent to socket");
-                System.Threading.Thread.Sleep(3000);
 
                 // Receive the response from the remote device.
                 int bytesRec = sender.Receive(bytes);
                 Console.WriteLine("Echoed test = {0}",
                     Encoding.ASCII.GetString(bytes, 0, bytesRec));
                 Console.WriteLine("received response from server");
-                System.Threading.Thread.Sleep(3000);
 
                 // Release the socket.
                 Console.WriteLine("about to shut down");
-                System.Threading.Thread.Sleep(3000);
                 sender.Shutdown(SocketShutdown.Both);
                 sender.Close();
 
