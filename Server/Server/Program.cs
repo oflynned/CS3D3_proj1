@@ -42,23 +42,33 @@ public class SynchronousSocketListener
         {
             while (true)
             {
+                //increment request counter
                 reqCount++;
                 Console.WriteLine("server initiated");
+                //accept incoming connection
                 clientSocket = serverSocket.AcceptTcpClient();
                 Console.WriteLine("client connected");
 
+                //buffer
                 NetworkStream networkStream = clientSocket.GetStream();
                 byte[] bytesFrom = new Byte[10025];
 
+                //read in length of bytes to be received
                 int bytesRead = networkStream.Read(bytesFrom, 0, bytesFrom.Length);
                 Console.WriteLine(bytesRead);
 
-                System.Threading.Thread.Sleep(3000);
+                //read in bytes to string
                 string dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
                 dataFromClient = dataFromClient.Substring(0, bytesRead);
                 Console.WriteLine("data: " + dataFromClient);
                 string serverResponse = "data from client: " + dataFromClient;
+
+                //write data received to a txt file 
+                System.IO.File.WriteAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataReceived.txt", dataFromClient);
+
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(serverResponse);
+
+                //handle response and flush connection
                 networkStream.Write(sendBytes, 0, sendBytes.Length);
                 networkStream.Flush();
                 Console.WriteLine("server response: " + serverResponse);

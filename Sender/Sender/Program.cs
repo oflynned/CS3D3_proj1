@@ -24,7 +24,7 @@ public class SynchronousSocketClient
             Console.WriteLine("Input a port to connect to: ");
             port = int.Parse(Console.ReadLine());
 
-            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             //IPAddress ipAddress = ipHostInfo.AddressList[0];
 
 
@@ -54,7 +54,11 @@ public class SynchronousSocketClient
                 // string line = Console.ReadLine();
                 // byte[] msg = byte[].Parse(line);
 
-                byte[] msg = Encoding.ASCII.GetBytes("They're gonna suck my dick.");
+                //byte[] msg = Encoding.ASCII.GetBytes("hardcoded test message here");
+
+                //read in external text file to string
+                string text = System.IO.File.ReadAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataSent.txt");
+                byte[] msg = Encoding.ASCII.GetBytes(text);
 
                 Console.WriteLine("encoded message to bytes");
 
@@ -69,7 +73,7 @@ public class SynchronousSocketClient
                 Console.WriteLine("received response from server");
 
                 // Release the socket.
-                Console.WriteLine("about to shut down");
+                Console.WriteLine("releasing socket and shutting down");
                 sender.Shutdown(SocketShutdown.Both);
                 sender.Close();
 
