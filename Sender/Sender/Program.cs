@@ -2,12 +2,13 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Collections;
 
 public class SynchronousSocketClient
 {
-
     public static void StartClient()
     {
+
         // Data buffer for incoming data.
         byte[] bytes = new byte[1024];
 
@@ -25,9 +26,6 @@ public class SynchronousSocketClient
             port = int.Parse(Console.ReadLine());
 
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            //IPAddress ipAddress = ipHostInfo.AddressList[0];
-
-
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
             // Create a TCP/IP  socket.
@@ -43,22 +41,72 @@ public class SynchronousSocketClient
                     sender.RemoteEndPoint.ToString());
                 Console.WriteLine("connected to socket");
 
-                //byte[] msg;
-                //byte[] line = Console.ReadLine();
-                //string msg = string.Parse(line);
-                //msg = Encoding.ASCII.GetBytes(msg.ToString());
-
-
-                // Encode the data string into a byte array.
-                //read in user defined data
-                // string line = Console.ReadLine();
-                // byte[] msg = byte[].Parse(line);
-
-                //byte[] msg = Encoding.ASCII.GetBytes("hardcoded test message here");
-
                 //read in external text file to string
+                //8 bits per byte ascii
                 string text = System.IO.File.ReadAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataSent.txt");
-                byte[] msg = Encoding.ASCII.GetBytes(text);
+                
+                byte[] msg = Encoding.ASCII.GetBytes(text); //convert bytes to bits
+                BitArray bitMsg = new BitArray(msg);  //append header and trailer [amount of bits, 0, 0, 0, 0, 0, 0, 0, 0, crc] header,blank 8 bits,trailer
+
+                //debug length
+                int len = bitMsg.Length;
+                Console.WriteLine("bits to be sent: " + len);
+
+                int byteLen = msg.Length;
+                Console.WriteLine("bytes to be sent: " + byteLen);
+
+                /*
+                byte[] buffer = new byte[8]; //packet of 8 bytes per transmission
+                byte[] _data = new byte[10]; //array for data with 1 packet each for header and trailer
+                byte[] data = new byte[10];
+                byte[] header = new byte[1]; //header of 1 byte
+                byte[] trailer = new byte[1]; //trailer of 1 byte
+
+                *attempt to include bit stuffing
+                for (int k = 0; k <= msg.Length; k++) //number of data link layer packets to be transmitted
+                {
+                    for (int i = 0; i <= 8; i++) //1 byte length
+                    {
+                        for (int j = 0; j <= 1; j++) //8 bytes to be sent per packet
+                        {
+                            bool[] buffer = Encoding.ASCII.GetBytes(text);
+                            if(buffer[0] = true && buffer[1] = true & buffer[2] = true & buffer[3] = true & buffer[4] = true)
+                            {
+                                buffer[5] = false;
+                            }
+                        }
+                    }
+                    _data[k] = buffer[i,j];
+                    
+                    **gremlin function
+                    static Random rnd = new Random();
+                    static Random rndPacket = new Random();
+
+                    int r = rnd.Next(_data.Count); //random bit to flip within array
+                    int rP = rnd.Next(0,100); //50% chance of corrupted packet
+
+                    if(rP >50)
+                    {
+                        if(_data[r] = true)
+                        {
+                        _data[r] = false;
+                        }
+                        else if (_data[r] = false)
+                        {
+                            _data[r] = true;
+                        }
+                    }
+                }
+                
+                **shift data array right by 1
+                for(int j=0;j<10;j++){
+                    _data[(j+1)%msg.Length] = data[j];
+                }
+
+                **add header and trailer
+                data[0] = (byte)len; //may need to include various info about mac address, source, destination ie unknown header length
+                data[9] = (byte)crc; //crc included, may be used for padding if needed
+               */
 
                 Console.WriteLine("encoded message to bytes");
 
@@ -73,7 +121,7 @@ public class SynchronousSocketClient
                 Console.WriteLine("received response from server");
 
                 // Release the socket.
-                Console.WriteLine("releasing socket and shutting down");
+                Console.WriteLine("releasing socket and shutting down\n");
                 sender.Shutdown(SocketShutdown.Both);
                 sender.Close();
 
