@@ -62,7 +62,7 @@ public class SynchronousSocketClient
                 byte[] header = new byte[1]; //header of 1 byte
                 byte[] trailer = new byte[1]; //trailer of 1 byte
 
-                *attempt to include bit stuffing
+                **attempt to include bit stuffing
                 for (int k = 0; k <= msg.Length; k++) //number of data link layer packets to be transmitted
                 {
                     for (int i = 0; i <= 8; i++) //1 byte length
@@ -73,12 +73,13 @@ public class SynchronousSocketClient
                             if(buffer[0] = true && buffer[1] = true & buffer[2] = true & buffer[3] = true & buffer[4] = true)
                             {
                                 buffer[5] = false;
+                                //unbitstuff at server side
                             }
                         }
                     }
                     _data[k] = buffer[i,j];
                     
-                    **gremlin function
+                    **attempt at gremlin function
                     static Random rnd = new Random();
                     static Random rndPacket = new Random();
 
@@ -103,14 +104,16 @@ public class SynchronousSocketClient
                     _data[(j+1)%msg.Length] = data[j];
                 }
 
-                **add header and trailer
-                data[0] = (byte)len; //may need to include various info about mac address, source, destination ie unknown header length
-                data[9] = (byte)crc; //crc included, may be used for padding if needed
+                **attempt to add add header and trailer
+                //transmit 8 bytes per transmission and then append headers and trailers
+                data[0] = (byte)len; //may need to include various info about mac address, source, destination ie unknown header length with flag
+                data[9] = (byte)crc; //crc included with flag, may be used for padding if needed
                */
-
-                //crc
-
-
+                
+                //crc checksum, xor transmission with divisor, crc is remainder
+                //cut off header and trailer on server side
+                //check trailer with recalculated crc on server side, if both remainders are the same, the checksum is correct
+                
                 Console.WriteLine("encoded message to bytes");
 
                 // Send the data through the socket.
