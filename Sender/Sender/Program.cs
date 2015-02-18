@@ -108,6 +108,9 @@ public class SynchronousSocketClient
                 data[9] = (byte)crc; //crc included, may be used for padding if needed
                */
 
+                //crc
+
+
                 Console.WriteLine("encoded message to bytes");
 
                 // Send the data through the socket.

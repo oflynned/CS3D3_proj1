@@ -45,22 +45,30 @@ public class SynchronousSocketListener
                 Console.WriteLine("bytes received: " + bytesRead);
 
                 //read in bytes to string
-                string dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
-                dataFromClient = dataFromClient.Substring(0, bytesRead);
-                Console.WriteLine("data: " + dataFromClient);
-                string serverResponse = "data received: " + dataFromClient;
+                if (bytesFrom.Length != 0)
+                {
+                    string dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
+                    dataFromClient = dataFromClient.Substring(0, bytesRead);
+                    Console.WriteLine("data: " + dataFromClient);
+                    string serverResponse = "data received: " + dataFromClient;
 
-                //write data received to a txt file 
-                System.IO.File.WriteAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataReceived.txt", dataFromClient);
-                //encode from string to bytes
-                Byte[] sendBytes = Encoding.ASCII.GetBytes(serverResponse);
+                    //write data received to a txt file 
+                    System.IO.File.WriteAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataReceived.txt", dataFromClient);
+                    //encode from string to bytes
+                    Byte[] sendBytes = Encoding.ASCII.GetBytes(serverResponse);
 
-                //handle response and flush connection
-                networkStream.Write(sendBytes, 0, sendBytes.Length);
-                networkStream.Flush();
-                //write server response
-                Console.WriteLine("server response: " + "'" + serverResponse + "'");
-                Console.WriteLine("\n");
+                    //handle response and flush connection
+                    networkStream.Write(sendBytes, 0, sendBytes.Length);
+                    networkStream.Flush();
+                    //write server response
+                    Console.WriteLine("server response: " + "'" + serverResponse + "'");
+                    Console.WriteLine("\n");
+                }
+                else if (bytesFrom.Length == 0)
+                {
+                    Console.WriteLine("empty string, received size: " + bytesFrom);
+                }
+                
             }
         }
         catch (Exception e)
