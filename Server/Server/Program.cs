@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Edmond O Flynn 12304742 CS3D3 Assignment 1
+
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;

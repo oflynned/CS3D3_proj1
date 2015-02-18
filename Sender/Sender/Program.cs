@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Edmond O Flynn 12304742 CS3D3 Assignment 1
+
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -6,17 +8,30 @@ using System.Collections;
 
 public class SynchronousSocketClient
 {
+    public static void WriteTextFile()
+    {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var stringChars = new char[1024];
+        var random = new Random();
+
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = chars[random.Next(chars.Length)];
+        }
+
+        var finalString = new String(stringChars);
+        System.IO.File.WriteAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataSent.txt", finalString);
+    }
     public static void StartClient()
     {
-
-        // Data buffer for incoming data.
+        //Data buffer for incoming data.
         byte[] bytes = new byte[1024];
 
-        // Connect to a remote device.
+        //Connect to a remote device.
         try
         {
-            // Establish the remote endpoint for the socket.
-            // This example uses port 11000 on the local computer.
+            //Establish the remote endpoint for the socket.
+            //Use IP Address and port
             int port;
             IPAddress ipAddress;
 
@@ -28,16 +43,16 @@ public class SynchronousSocketClient
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
-            // Create a TCP/IP  socket.
+            //Create a TCP/IP  socket.
             Socket sender = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
 
-            // Connect the socket to the remote endpoint. Catch any errors.
+            //Connect the socket to the remote endpoint. Catch any errors.
             try
             {
                 sender.Connect(remoteEP);
 
-                Console.WriteLine("Socket connected to {0}",
+                Console.WriteLine("socket connected to {0}",
                     sender.RemoteEndPoint.ToString());
                 Console.WriteLine("connected to socket");
 
@@ -46,7 +61,8 @@ public class SynchronousSocketClient
                 string text = System.IO.File.ReadAllText(@"C:\Users\Ed\Documents\Visual Studio 2013\Projects\CS3D3_proj1\Data\dataSent.txt");
                 
                 byte[] msg = Encoding.ASCII.GetBytes(text); //convert bytes to bits
-                BitArray bitMsg = new BitArray(msg);  //append header and trailer [amount of bits, 0, 0, 0, 0, 0, 0, 0, 0, crc] header,blank 8 bits,trailer
+                BitArray bitMsg = new BitArray(msg);  
+                //append header and trailer [amount of bits + flag, 0, 0, 0, 0, 0, 0, 0, 0, crc + flag] header,blank 8 bits,trailer
 
                 //debug length
                 int len = bitMsg.Length;
@@ -154,6 +170,7 @@ public class SynchronousSocketClient
 
     public static int Main(String[] args)
     {
+        WriteTextFile();
         bool done = false;
         while (!done)
         {
