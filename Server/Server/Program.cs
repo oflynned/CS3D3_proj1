@@ -5,15 +5,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-public class SynchronousSocketListener
+public class SocketListener
 {
 
-    // Incoming data from the client.
+    //incoming data from the client.
     public static string data = null;
 
     public static void StartListening()
     {
-        // Data buffer for incoming data.
+        //data buffer
         byte[] bytes = new Byte[1024];
         int port = 4547;
 
@@ -25,7 +25,6 @@ public class SynchronousSocketListener
         int reqCount = 0;
         TcpClient clientSocket = default(TcpClient);
         serverSocket.Start();
-        reqCount = 0;
         try
         {
             while (true)
@@ -78,7 +77,7 @@ public class SynchronousSocketListener
             Console.WriteLine(e.ToString());
         }
 
-        Console.WriteLine("\nPress ENTER to continue...");
+        Console.WriteLine("\nPress any button to end...");
         Console.Read();
 
     }

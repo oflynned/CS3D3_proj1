@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Collections;
 
-public class SynchronousSocketClient
+public class SocketClient
 {
     public static void WriteTextFile()
     {
